@@ -1,7 +1,7 @@
 module Cribbage
 
     Suits = ["Clubs", "Diamonds", "Hearts", "Spades"]
-    Values = ["Ace"] + (2..10).to_a + ["Jack", "Queen", "King"]
+    Values = ["Ace"] + (2..10).to_a.map(&:to_s) + ["Jack", "Queen", "King"]
 
   class Card
 
@@ -9,9 +9,7 @@ module Cribbage
 
     def initialize(value, suit)
 
-      if (2..10).to_a.include?(value.to_i)
-        @value = value.strip
-      elsif (match = Values.select { |s| s.match?(/^#{Regexp.escape(value)}/i) })
+      if (match = Values.select { |s| s.match?(/^#{Regexp.escape(value)}/i) })
         @value = match.first
       else
         raise ArgumentError, "Invalid card value given"
@@ -53,14 +51,21 @@ module Cribbage
 
   class Hand
 
-    attr_reader :cards
+    attr_reader :cards, :cut
 
     def initialize(cards, cut, crib = false)
       @cards = cards
-      @suits = cards.map { |card| card.suit }
-      @values = cards.map { |card| card.value }
       @cut = cut
       @crib = crib
+      @suits = cards.map { |card| card.suit }
+      @values = cards.map { |card| card.value }
+      if cards.uniq.length != 4 || cards.include?(cut)
+        raise ArgumentError, "All cards in hand should be distinct!"
+      end
+    end
+
+    def crib?
+      return @crib
     end
 
 

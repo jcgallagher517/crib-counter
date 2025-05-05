@@ -16,8 +16,12 @@ end
 
 puts "Now enter the cut card:"
 cut = Cribbage::Card.new(*gets.split(' '))
+if input.include?(cut)
+  STDERR.puts("Cut card should not be a duplicate.")
+  exit(1)
+end
 
-def crib?
+def is_crib?
   puts "Is this the dealer's crib? (y/n):"
   case (input = gets)
   when /^y/i
@@ -26,13 +30,15 @@ def crib?
     false
   else
     puts "Please answer either yes or no!"
-    crib?
+    is_crib?
   end
 end
-crib = crib?
+crib = is_crib?
 
 hand = Cribbage::Hand.new(input, cut, crib)
 
 hand.cards.each do |card|
   puts card
 end
+puts "Cut: " + hand.cut.to_s
+puts hand.crib?
