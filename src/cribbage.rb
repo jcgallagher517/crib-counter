@@ -1,7 +1,7 @@
 module Cribbage
 
     Suits = ["Clubs", "Diamonds", "Hearts", "Spades"]
-    Values = ["Ace"] + (2..10).to_a.map(&:to_s) + ["Jack", "Queen", "King"]
+    Values = ["Ace"] + (2..10).map(&:to_s) + ["Jack", "Queen", "King"]
 
   class Card
 
@@ -59,8 +59,10 @@ module Cribbage
       @crib = crib
       @suits = cards.map { |card| card.suit }
       @values = cards.map { |card| card.value }
-      if cards.uniq.length != 4 || cards.include?(cut)
-        raise ArgumentError, "All cards in hand should be distinct!"
+      if cards.length != 4
+        raise ArgumentError, "Your hand should contain four cards."
+      elsif cards.uniq.length < 4 || cards.include?(cut)
+        raise ArgumentError, "All cards in your hand should be distinct."
       end
     end
 
@@ -69,32 +71,44 @@ module Cribbage
     end
 
 
-    private
+    # private
 
     def count_suits
+      u_suits = @suits.uniq
+      if !@crib && u_suits.length == 1
+        return u_suits.first == cut.suit ? 5 : 4
+      elsif @crib && u_suits.length == 1 && u_suits.first == cut.suit
+        return 5
+      end
+    end
 
+    def right_jack
+      jack = cards.select { |c| c.value == "Jack" && c.suit == cut.suit }
+      return jack ? jack.first : nil
+    end
+
+
+
+    def runs
+      # for runs, face-cards are sequential
+      vals = Values.zip(1..13).to_h
+      card_vals = (@values.map { |v| vals[v] } + vals[cut.value]).sort
+
+
+    end
+
+
+
+    def pairs
+
+    end
+
+
+    def fifteens
+      # face-cards count as ten for fifteen counting
+      vals = Values.zip((1..10).to_a + [10]*3).to_h
+      card_vals = @values.map { |v| vals[v] } + vals[cut.value]
       
-    end
-
-
-    def count_jack
-
-      jacks = Suits.map { |suit| Card.new("Jack", suit) }
-
-    end
-
-
-
-    def count_runs
-
-    end
-
-    def count_pairs
-
-    end
-
-
-    def count_fifteens
 
     end
     

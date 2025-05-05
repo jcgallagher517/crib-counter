@@ -37,8 +37,5 @@ crib = is_crib?
 
 hand = Cribbage::Hand.new(input, cut, crib)
 
-hand.cards.each do |card|
-  puts card
-end
-puts "Cut: " + hand.cut.to_s
-puts hand.crib?
+puts hand.right_jack
+puts hand.count_suits
