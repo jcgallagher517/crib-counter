@@ -8,8 +8,10 @@ input = gets.split(',')
           .map { |c| Cribbage::Card.new(c[0], c[1]) }
 if input.length != 4
   STDERR.puts("Your hand should contain exactly four cards.")
+  exit(1)
 elsif input.uniq.length < 4
   STDERR.puts("Your hand should not contain duplicate cards.")
+  exit(1)
 end
 
 puts "Now enter the cut card:"
@@ -29,4 +31,8 @@ def crib?
 end
 crib = crib?
 
-hand = Hand.new(input, cut, crib)
+hand = Cribbage::Hand.new(input, cut, crib)
+
+hand.cards.each do |card|
+  puts card
+end

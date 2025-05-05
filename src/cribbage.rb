@@ -10,7 +10,7 @@ module Cribbage
     def initialize(value, suit)
 
       if (2..10).to_a.include?(value.to_i)
-        @value = value
+        @value = value.strip
       elsif (match = Values.select { |s| s.match?(/^#{Regexp.escape(value)}/i) })
         @value = match.first
       else
@@ -53,6 +53,8 @@ module Cribbage
 
   class Hand
 
+    attr_reader :cards
+
     def initialize(cards, cut, crib = false)
       @cards = cards
       @suits = cards.map { |card| card.suit }
@@ -60,6 +62,7 @@ module Cribbage
       @cut = cut
       @crib = crib
     end
+
 
     private
 
