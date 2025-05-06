@@ -5,11 +5,14 @@ module Cribbage
 
   class Card
 
+    include Comparable 
     attr_reader :value, :suit
 
     def initialize(value, suit)
 
-      if (match = Values.select { |s| s.match?(/^#{Regexp.escape(value)}/i) })
+      if value.to_i == 1
+        @value = Values.first
+      elsif (match = Values.select { |s| s.match?(/^#{Regexp.escape(value)}/i) })
         @value = match.first
       else
         raise ArgumentError, "Invalid card value given"
@@ -44,6 +47,11 @@ module Cribbage
     def hash
       [value, suit].hash
     end
+
+    def <=>(other)
+      vals = Values.zip(1..13).to_h
+      vals[value] <=> vals[other.value]
+    end
     
   end
 
@@ -70,9 +78,6 @@ module Cribbage
       return @crib
     end
 
-
-    # private
-
     def count_suits
       u_suits = @suits.uniq
       if !@crib && u_suits.length == 1
@@ -87,34 +92,39 @@ module Cribbage
       return jack ? jack.first : nil
     end
 
-
-
-    def runs
-      # for runs, face-cards are sequential
-      vals = Values.zip(1..13).to_h
-      card_vals = (@values.map { |v| vals[v] } + vals[cut.value]).sort
-
-
-    end
-
-
-
     def pairs
-
+      (cards + [cut]).combination(2).select { |p| p[0].value == p[1].value }
     end
-
 
     def fifteens
       # face-cards count as ten for fifteen counting
       vals = Values.zip((1..10).to_a + [10]*3).to_h
-      card_vals = @values.map { |v| vals[v] } + vals[cut.value]
-      
-
+      combos = (2..5).flat_map { |n| (cards + [cut]).combination(n).to_a }
+      combos.select { |c| c.map { |card| vals[card.value] }.sum == 15 }
     end
-    
+
+
+    # minor bug in this code, run more tests, it doesn't work all the time
+    def runs
+      # for runs, face-cards are sequential
+      vals = Values.zip(1..13).to_h
+      5.downto(3) do |n|
+        combos = (cards + [cut]).combination(n).to_a
+        combos.select! { |c| c.map { |card| vals[card.value] }
+                           .sort
+                           .each_cons(2)
+                           .all? { |a, b| b - a == 1 } }
+        if !combos.empty?
+          return combos.map(&:sort)
+        end
+      end
+      return nil
+    end
+
+
+
 
 
   end
-
 
 end
