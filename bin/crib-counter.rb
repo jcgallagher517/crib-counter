@@ -1,4 +1,6 @@
-require_relative "cribbage"
+#!/usr/bin/env ruby
+
+require_relative "../lib/cribbage"
 
 puts "Welcome to Cribbage Counter!"
 
