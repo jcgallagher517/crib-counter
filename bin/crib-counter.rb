@@ -26,20 +26,64 @@ end
 def is_crib?
   puts "Is this the dealer's crib? (y/n):"
   case (input = gets)
-  when /^y/i
+  when /y/i
     true
-  when /^n/i
+  when /n/i
     false
   else
-    puts "Please answer either yes or no!"
+    puts "Please answer either yes or no! (y/n)"
     is_crib?
   end
 end
 crib = is_crib?
 
 hand = Cribbage::Hand.new(input, cut, crib)
+result = hand.count
 
-# puts hand.right_jack
-# puts hand.count_suits
+# display hand
+puts "\nYour hand contains the following cards:"
+puts Cribbage.card_array_to_s(hand.cards)
+puts "The #{hand.cut} was cut."
+if hand.crib?
+  puts "And it's the dealer's crib."
+end
 
-p hand.runs
+if result[:pairs] != 0
+  puts "\nYou have the following pairs:"
+  hand.pairs.each do |pair|
+    puts Cribbage.card_array_to_s(pair)
+  end
+  puts "+#{result[:pairs]} points!"
+end
+
+if result[:fifteens] != 0
+  puts "\nYou have the following fifteens:"
+  hand.fifteens.each do |fifteen|
+    puts Cribbage.card_array_to_s(fifteen)
+  end
+  puts "+#{result[:fifteens]} points!"
+end
+
+if result[:runs] != 0
+  puts "\nYou have the following runs:"
+  hand.runs.each do |run|
+    puts Cribbage.card_array_to_s(run)
+  end
+  puts "+#{result[:runs]} points!"
+end
+
+if result[:suits] != 0
+  puts "\nYour cards are all of the same suit."
+  puts "+#{result[:suits]} points!"
+end
+
+if result[:jack] != 0
+  puts "\nYour #{hand.right_jack} is the right jack."
+  puts "+1 point!"
+end
+
+if (points = result.values.sum) != 0
+  puts "\nYour hand is worth #{points} points!"
+else
+  puts "\nYour hand is worth 19 points! Sorry!"
+end

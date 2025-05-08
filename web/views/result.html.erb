@@ -8,53 +8,62 @@
     <h1>Result of your hand:</h1>
 
     <p>
-      <% if res_suits %>
-      <b>Your cards are all of the same suit: +<%= res_suits %> points!</b>
+      <h3>Your hand contains the following cards:</h3>
+      <%= Cribbage.card_array_to_s(hand.cards) %><br>
+      The <%= hand.cut %> was cut.
+      <% if hand.crib? %>
+      <br>And it's the dealer's crib.
       <% end %>
     </p>
+
     
     <p>
-      <% if res_jack %>
-      <b>Your <%= res_jack %> is the right jack. +1 point!</b>
-      <% end %>
-    </p>
-    
-    <p>
-      <% if res_pairs %>
+      <% if result[:pairs] != 0 %>
       <h3>You have the following pairs:</h3>
-      <% res_pairs.each do |pair| %>
-      <b><%= pair[0] %></b> and <b><%= pair[1] %></b>
-      <br>
+      <% hand.pairs.each do |pair| %>
+      <%= Cribbage.card_array_to_s(pair) %><br>
       <% end %>
-      <b>+<%= 2*res_pairs.length %> points!</b>
+      <b>+<%= result[:pairs] %> points!</b>
       <% end %>
     </p>
     
     <p>
-      <% if res_fifteens %>
+      <% if result[:fifteens] != 0 %>
       <h3>You have the following fifteens:</h3>
-      <% res_fifteens.each do | fifteen | %>
-      <%= fifteen.each { |c| c } %>
-      <br>
+      <% hand.fifteens.each do | fifteen | %>
+      <%= Cribbage.card_array_to_s(fifteen) %><br>
       <% end %>
-      <b>+<%= 2*res_fifteens.length %> points!</b>
+      <b>+<%= result[:fifteens] %> points!</b>
       <% end %>
     </p>
     
     <p>
-      <% if res_runs %>
+      <% if result[:runs] != 0 %>
       <h3>You have the following runs:</h3>
-      <% res_runs.each do | run | %>
-      <%= run.each { |c| c } %>
-      <br>
+      <% hand.runs.each do | run | %>
+      <%= Cribbage.card_array_to_s(run) %><br>
       <% end %>
-      <b>+<%= res_runs.map(&:length).sum %> points!</b>
+      <b>+<%= result[:runs] %> points!</b>
+      <% end %>
+    </p>
+
+    <p>
+      <% if result[:suits] != 0 %>
+      Your cards are all of the same suit.<br>
+      <b>+<%= result[:suits] %> points!</b>
       <% end %>
     </p>
     
     <p>
-      <% if res_total != 0 %>
-      Your hand is worth <b><%= res_total %> points!</b>
+      <% if result[:jack] != 0 %>
+      Your <%= hand.right_jack %> is the right jack.<br>
+      <b>+1 point!</b>
+      <% end %>
+    </p>
+    
+    <p>
+      <% if (points = result.values.sum) != 0 %>
+      Your hand is worth <b><%= points %> points!</b>
       <% else %>
       Your hand is worth <b>19 points!</b> Sorry!
       <% end %>

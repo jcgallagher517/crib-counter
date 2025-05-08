@@ -56,6 +56,23 @@ module Cribbage
   end
 
 
+  # nicely print an array of cards
+  def Cribbage.card_array_to_s(arr)
+    s = ""
+    arr.each_with_index do |card, i|
+      if arr[i+2]
+        s += card.to_s + ", "
+      elsif arr[i+1] && arr.length > 2
+        s += card.to_s + ", and "
+      elsif arr[i+1]
+        s += card.to_s + " and "
+      else
+        s += card.to_s
+      end
+    end
+    return s
+  end
+  
 
   class Hand
 
@@ -79,10 +96,10 @@ module Cribbage
     end
 
     def count
-      {:suits => self.count_suits ? self.count_suits : 0,
+      {:suits => self.count_suits,
        :jack => self.right_jack ? 1 : 0,
        :pairs => self.pairs ? 2*self.pairs.length : 0,
-       :fifteens => self.fifteens ? 2*self.fifteens : 0,
+       :fifteens => self.fifteens ? 2*self.fifteens.length : 0,
        :runs => self.runs ? self.runs.map(&:length).sum : 0}
     end
 
@@ -92,6 +109,8 @@ module Cribbage
         return u_suits.first == cut.suit ? 5 : 4
       elsif @crib && u_suits.length == 1 && u_suits.first == cut.suit
         return 5
+      else
+        return 0
       end
     end
 
