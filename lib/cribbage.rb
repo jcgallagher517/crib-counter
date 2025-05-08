@@ -78,6 +78,14 @@ module Cribbage
       return @crib
     end
 
+    def count
+      {:suits => self.count_suits ? self.count_suits : 0,
+       :jack => self.right_jack ? 1 : 0,
+       :pairs => self.pairs ? 2*self.pairs.length : 0,
+       :fifteens => self.fifteens ? 2*self.fifteens : 0,
+       :runs => self.runs ? self.runs.map(&:length).sum : 0}
+    end
+
     def count_suits
       u_suits = @suits.uniq
       if !@crib && u_suits.length == 1

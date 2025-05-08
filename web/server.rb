@@ -25,10 +25,28 @@ server.mount_proc "/result" do |req, res|
   inp_cut = req.query["cut"] || ""
   crib = req.query["crib"] == "on" ? true : false
 
-  # process and count hand
-  inp_cards.map! { |c| Cribbage::Card.new(c.split(' ')) }
-  inp_cut = Cribbage::Card.new(inp_cut.split(' '))
+  # create hand
+  inp_cards.map! { |c| Cribbage::Card.new(*c.split(' ')[0..1]) }
+  inp_cut = Cribbage::Card.new(*inp_cut.split(' ')[0..1])
   hand = Cribbage::Hand.new(inp_cards, inp_cut, crib)
+
+  result = hand.count
+
+  # probably delete the rest of this stuff using new count method
+
+  # define results
+  res_suits = hand.count_suits
+  res_jack = hand.right_jack
+  res_pairs = hand.pairs
+  res_fifteens = hand.fifteens
+  res_runs = hand.runs
+
+  # add up all points
+  res_total = res_suits ? res_suits : 0
+  res_total += res_jack ? 1 : 0
+  res_total += res_pairs ? 2*res_pairs.length : 0
+  res_total += res_fifteens ? 2*res_fifteens.length : 0
+  res_total += res_runs ? res_runs.map(&:length).sum : 0
 
   template = File.read(File.join(__dir__, "views", "result.html.erb"))
   res.content_type = "text/html"

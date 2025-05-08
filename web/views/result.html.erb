@@ -7,8 +7,60 @@
   <body>
     <h1>Result of your hand:</h1>
 
-    <%= hand.cards.each do |c| p c end %>
+    <p>
+      <% if res_suits %>
+      <b>Your cards are all of the same suit: +<%= res_suits %> points!</b>
+      <% end %>
+    </p>
     
+    <p>
+      <% if res_jack %>
+      <b>Your <%= res_jack %> is the right jack. +1 point!</b>
+      <% end %>
+    </p>
+    
+    <p>
+      <% if res_pairs %>
+      <h3>You have the following pairs:</h3>
+      <% res_pairs.each do |pair| %>
+      <b><%= pair[0] %></b> and <b><%= pair[1] %></b>
+      <br>
+      <% end %>
+      <b>+<%= 2*res_pairs.length %> points!</b>
+      <% end %>
+    </p>
+    
+    <p>
+      <% if res_fifteens %>
+      <h3>You have the following fifteens:</h3>
+      <% res_fifteens.each do | fifteen | %>
+      <%= fifteen.each { |c| c } %>
+      <br>
+      <% end %>
+      <b>+<%= 2*res_fifteens.length %> points!</b>
+      <% end %>
+    </p>
+    
+    <p>
+      <% if res_runs %>
+      <h3>You have the following runs:</h3>
+      <% res_runs.each do | run | %>
+      <%= run.each { |c| c } %>
+      <br>
+      <% end %>
+      <b>+<%= res_runs.map(&:length).sum %> points!</b>
+      <% end %>
+    </p>
+    
+    <p>
+      <% if res_total != 0 %>
+      Your hand is worth <b><%= res_total %> points!</b>
+      <% else %>
+      Your hand is worth <b>19 points!</b> Sorry!
+      <% end %>
+    </p>
+    
+    <hr>
     <a href="/">Back</a>
   </body>
 </html>
