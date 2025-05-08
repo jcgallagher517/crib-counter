@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cribbage Counter</title>
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <h1>Welcome to Cribbage Counter!</h1>
+
+    <form action="/result" method="get">
+
+    <h3>Enter your cards:</h3>
+      <input type="text" name="card1" required/>
+      <input type="text" name="card2" required/>
+      <input type="text" name="card3" required/>
+      <input type="text" name="card4" required/>
+
+    <h3>Enter the cut card:</h3>
+    <input type="text" name="cut" required/>
+
+    <p><b>Is this the dealer's crib?</b>
+    <input id="crib" type="checkbox"/>
+    </p>
+
+    <button type="submit">Submit</button>
+    </form>
+
+  </body>
+</html>
