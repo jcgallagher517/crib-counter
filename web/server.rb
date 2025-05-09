@@ -30,6 +30,7 @@ server.mount_proc "/result" do |req, res|
   inp_cut = Cribbage::Card.new(*inp_cut.split(' ')[0..1])
   hand = Cribbage::Hand.new(inp_cards, inp_cut, crib)
   result = hand.count
+  points = result.values.sum
 
   template = File.read(File.join(__dir__, "views", "result.html.erb"))
   res.content_type = "text/html"

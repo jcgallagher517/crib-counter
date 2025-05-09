@@ -130,8 +130,6 @@ module Cribbage
       combos.select { |c| c.map { |card| vals[card.value] }.sum == 15 }
     end
 
-
-    # minor bug in this code, run more tests, it doesn't work all the time
     def runs
       # for runs, face-cards are sequential
       vals = Values.zip(1..13).to_h
@@ -147,10 +145,6 @@ module Cribbage
       end
       return nil
     end
-
-
-
-
 
   end
 

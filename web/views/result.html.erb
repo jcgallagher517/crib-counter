@@ -62,10 +62,14 @@
     </p>
     
     <p>
-      <% if (points = result.values.sum) != 0 %>
-      Your hand is worth <b><%= points %> points!</b>
+      <% case points %>
+      <% when 0 %>
+      Your hand is worth <b>19 points.</b> Sorry!
+      <% when 29 %>
+      Your hand is worth <b>29 points.</b>
+      That's the highest scoring hand in cribbage. Well done!
       <% else %>
-      Your hand is worth <b>19 points!</b> Sorry!
+      Your hand is worth <b><%= points %> points!</b>
       <% end %>
     </p>
     

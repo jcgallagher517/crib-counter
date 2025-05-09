@@ -82,8 +82,12 @@ if result[:jack] != 0
   puts "+1 point!"
 end
 
-if (points = result.values.sum) != 0
-  puts "\nYour hand is worth #{points} points!"
+points = result.values.sum
+case points
+when 0
+  puts "\nYour hand is worth 19 points. Sorry!"
+when 29
+  puts "\nYour hand is worth 29 points. That's the highest scoring hand in cribbage. Well done!"
 else
-  puts "\nYour hand is worth 19 points! Sorry!"
+  puts "\nYour hand is worth #{points} points."
 end
