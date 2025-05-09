@@ -1,6 +1,5 @@
 require 'webrick'
 require 'erb'
-require 'cgi'
 require_relative '../lib/cribbage'
 
 PORT = 3000
